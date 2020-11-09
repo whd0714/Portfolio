@@ -44,4 +44,28 @@ public class MemberController {
 
         return "redirect:/";
     }
+
+    @GetMapping("/check-email-token")
+    public String checkEmailToken(String email, String token, Model model){
+        Member member = memberRepository.findByEmail(email);
+        System.out.println(email);
+        System.out.println(member.getEmail());
+        System.out.println(token);
+        System.out.println(member.getEmailToken());
+        String view = "member/checked-email";
+        if(member == null){
+            System.out.println("이메일오류");
+            model.addAttribute("error","error.email");
+            return view;
+        }
+        if(!member.checkedToken(token)){
+            System.out.println("토큰오류");
+            model.addAttribute("error","error.token");
+            return view;
+        }
+
+        memberService.successCheckedEmail(member);
+        model.addAttribute("memberId",member.getMemberId());
+        return view;
+    }
 }

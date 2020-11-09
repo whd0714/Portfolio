@@ -21,7 +21,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberService {
 
-
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
     private final MemberRepository memberRepository;
@@ -40,6 +39,7 @@ public class MemberService {
                 .email(signUpForm.getEmail())
                 .build();
         member.generateToken();
+        memberRepository.save(member);
         return member;
     }
 
@@ -47,7 +47,7 @@ public class MemberService {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(member.getEmail());
         simpleMailMessage.setSubject("이메일 인증");
-        simpleMailMessage.setText("check-email-token/?token=" + member.getEmailToken() +"&email=" + member.getEmail());
+        simpleMailMessage.setText("/check-email-token/?token=" + member.getEmailToken() +"&email=" + member.getEmail());
         javaMailSender.send(simpleMailMessage);
     }
 
@@ -61,4 +61,7 @@ public class MemberService {
 
     }
 
+    public void successCheckedEmail(Member member) {
+        member.successCheckedEmailSettings();
+    }
 }

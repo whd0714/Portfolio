@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments.html :: head">
+</head>
+<body>
+
+    <div th:replace="fragments.html :: main-nav"></div>
+
+    <div class="alert alert-danger" th:if="${error}">
+        이메일인증을 다시 한번 확인해주세요
+    </div>
+
+    <div class="row justify-content-center" th:if="${error == null}">
+        <h5><span th:text="${memberId}"></span>님, 회원가입을 축하합니다.</h5>
+    </div>
+</body>
+</html>

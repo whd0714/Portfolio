@@ -25,9 +25,6 @@ public class Member {
     private String password;
 
     @Column(nullable = false)
-    private String passwordConfirm;
-
-    @Column(nullable = false)
     private String email;
 
     private int shoeSize;
@@ -48,5 +45,14 @@ public class Member {
 
     public void generateToken() {
         this.emailToken = UUID.randomUUID().toString();
+    }
+
+    public boolean checkedToken(String token){
+        return this.emailToken.equals(token);
+    }
+
+    public void successCheckedEmailSettings() {
+        this.verifyEmail = true;
+        this.joinAt = LocalDateTime.now();
     }
 }

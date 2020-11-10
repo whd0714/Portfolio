@@ -2,6 +2,9 @@ package com.portfolio.service;
 
 import com.portfolio.controller.member.SignUpForm;
 import com.portfolio.controller.member.UserMember;
+import com.portfolio.controller.settings.NotificationForm;
+import com.portfolio.controller.settings.PasswordForm;
+import com.portfolio.controller.settings.SettingMemberForm;
 import com.portfolio.domain.Member;
 import com.portfolio.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -78,5 +81,27 @@ public class MemberService implements UserDetailsService {
         }
 
         return new UserMember(member);
+    }
+
+    public void updateSettingsProfile(Member member, SettingMemberForm settingMemberForm) {
+        member.setShoeSize(settingMemberForm.getShoeSize());
+        System.out.println(member.getShoeSize());
+        memberRepository.save(member);
+    }
+
+    public void updatePassword(Member member, PasswordForm passwordForm) {
+        String encode = passwordEncoder.encode(passwordForm.getNewPassword());
+        member.setPassword(encode);
+        memberRepository.save(member);
+    }
+
+    public void updateNotification(Member member, NotificationForm notificationForm) {
+        member.setWebRelease(notificationForm.isWebRelease());
+        member.setEmailRelease(notificationForm.isEmailRelease());
+        member.setWebLocale(notificationForm.isWebLocale());
+        member.setEmailLocale(notificationForm.isEmailLocale());
+
+        memberRepository.save(member);
+
     }
 }

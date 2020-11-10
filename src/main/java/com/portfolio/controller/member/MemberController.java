@@ -51,12 +51,10 @@ public class MemberController {
         Member member = memberRepository.findByEmail(email);
         String view = "member/checked-email";
         if(member == null){
-            System.out.println("이메일오류");
             model.addAttribute("error","error.email");
             return view;
         }
         if(!member.checkedToken(token)){
-            System.out.println("토큰오류");
             model.addAttribute("error","error.token");
             return view;
         }
@@ -73,10 +71,4 @@ public class MemberController {
         return "member/resend-check-email";
     }
 
-    @GetMapping("/profile")
-    public String viewProfile(@CurrentUser Member member, Model model){
-        model.addAttribute(member);
-
-        return "member/profile";
-    }
 }

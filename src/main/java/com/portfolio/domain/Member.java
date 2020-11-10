@@ -35,13 +35,13 @@ public class Member {
 
     private boolean verifyEmail;
 
-    private boolean WebRelease;
+    private boolean webRelease;
 
-    private boolean EmailRelease;
+    private boolean emailRelease;
 
-    private boolean WebLocale;
+    private boolean webLocale;
 
-    private boolean EmailLocale;
+    private boolean emailLocale;
 
     public void generateToken() {
         this.emailToken = UUID.randomUUID().toString();

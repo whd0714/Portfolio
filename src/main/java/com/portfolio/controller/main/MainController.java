@@ -12,8 +12,6 @@ public class MainController {
     @GetMapping("/")
     public String home(@CurrentUser Member member, Model model){
         if(member != null){
-            System.out.println("memberId3 = " + member.getMemberId());
-            System.out.println("verifyToken3 = " + member.isVerifyEmail());
             model.addAttribute(member);
         }
 

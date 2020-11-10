@@ -8,7 +8,6 @@
 
     <div class="alert alert-warning" th:if="${member != null && !member.verifyEmail}">
         이메일 인증이 필요합니다. <a th:href="@{/resend-check-email}">이메일 인증메일 보내기</a>
-        <span th:text="${member.isVerifyEmail()}"></span>
     </div>
 
 </body>

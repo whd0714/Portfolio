@@ -50,6 +50,17 @@
                 <li class="nav-item" sec:authorize="!isAuthenticated()">
                     <a class="nav-link" href="#" th:href="@{/sign-up}">회원가입</a>
                 </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" href="#" th:href="@{/#}">
+                        <i class="fa fa-bell"></i>
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" href="#" th:href="@{/board}">게시판<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" href="#" th:href="@{/release}">발매정보<span class="sr-only">(current)</span></a>
+                </li>
                 <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <svg th:data-jdenticon-value="${#authentication.name}" width="30" height="30">
@@ -103,41 +114,54 @@
                 <li class="nav-item" style="color:white;">
                     <p>
                         <span style="font-size:60px;" th:text="${member.getMemberId()}"></span>님&nbsp;&nbsp;
-                        <a href="#"style="color:grey;" th:href="@{/settings/profile}">회원정보 변경<span class="sr-only">(current)</span></a>
+                        <a href="#"style="color:grey;" th:href="@{/profile}">회원정보 변경<span class="sr-only">(current)</span></a>
                     </p>
                     <p>
-                        <i class="fa fa-envelope"></i><span class="col-11" th:text="${member.getEmail()}"></span> |
+                        <i class="fa fa-envelope"></i><span class="col-11" th:text="${member.getEmail()}"></span>|
                         <a th:if="${!member.isVerifyEmail()}" class="ml-1" href="#"style="color:grey;" th:href="@{/resend-check-email}">이메일인증 하기<span class="sr-only">(current)</span></a>
-                        <i th:if="${member.isVerifyEmail()}" class="fa fa-calendar"></i><span class="col-11" th:text="${#temporals.format(member.joinAt,'yyyy년 M월 dd일')}"></span>
+                        <span th:if="${member.isVerifyEmail()}">
+                            <i  class="fa fa-calendar"></i><span class="col-11" th:text="${#temporals.format(member.joinAt,'yyyy년 M월 dd일')}"></span>|
+                            <i  class="fa fa-user"></i> <span class="col-11">일반회원</span>|
+                            <i  class="fa fa-coins"></i> <span class="col-11">0P</span>|
+                        </span>
+
                     </p>
                 </li>
                 <li class="nav-item ml-5 mt-5" >
-                    <a href="" style="color:white;">
-                        <i class="fa fa-shopping-cart ml-2" style="font-size: 50px;"></i><br/>
+                    <a href="" style="color:white;" >
+                        <i class="fa fa-shopping-cart ml-2 mb-2" style="font-size: 50px;"></i><br/>
                         보유 상품
                     </a>
                 </li>
                 <li class="nav-item ml-5 mt-5">
                     <a href="" style="color:white;">
-                        <i class="fa fa-shopping-bag ml-2" style="font-size: 50px;"></i><br/>
+                        <i class="fa fa-shopping-bag ml-2 mb-2" style="font-size: 50px;"></i><br/>
                         구매 내역
                     </a>
                 </li>
                 <li class="nav-item ml-5 mt-5">
                     <a href="" style="color:white;">
-                        <i class="fa fa-won ml-2" style="font-size: 50px;"></i><br/>
+                        <i class="fa fa-won ml-2 mb-2" style="font-size: 50px;"></i><br/>
                         판매 내역
                     </a>
                 </li>
                 <li class="nav-item ml-5 mt-5">
                     <a href="" style="color:white;">
-                        <i class="fa fa-bookmark ml-3" style="font-size: 50px;"></i><br/>
+                        <i class="fa fa-bookmark ml-3 mb-2" style="font-size: 50px;"></i><br/>
                         관심 상품
                     </a>
                 </li>
             </ul>
         </div>
     </nav>
+
+
+    <div th:fragment="setting-menu (currentMenu)" class="list-group col-2 text-center mt-2">
+        <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'}? active" th:href="@{/settings/password}" role="tab" aria-controls="password">비밀번호 변경</a>
+
+        <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'notification'}? active" th:href="@{/settings/notification}" role="tab" aria-controls="buy">알림</a>
+        <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'keyword'}? active" th:href="@{/settings/keyword}" role="tab" aria-controls="keyword">키워드 설정</a>
+    </div>
 
 
 </body>

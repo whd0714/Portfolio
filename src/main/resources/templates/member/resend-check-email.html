@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments.html :: head">
+</head>
+<body>
+
+    <div th:replace="fragments.html :: main-nav"></div>
+
+    <div class="row justify-content-center row py-5">
+        <h5><span th:text="${member.memberId}"></span>님, <span th:text="${member.email}"></span>으로 인증메일을 발송했습니다.</h5>
+    </div>
+</body>
+</html>

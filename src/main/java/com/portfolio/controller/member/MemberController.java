@@ -11,6 +11,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
@@ -48,10 +49,6 @@ public class MemberController {
     @GetMapping("/check-email-token")
     public String checkEmailToken(String email, String token, Model model){
         Member member = memberRepository.findByEmail(email);
-        System.out.println(email);
-        System.out.println(member.getEmail());
-        System.out.println(token);
-        System.out.println(member.getEmailToken());
         String view = "member/checked-email";
         if(member == null){
             System.out.println("이메일오류");
@@ -67,5 +64,19 @@ public class MemberController {
         memberService.successCheckedEmail(member);
         model.addAttribute("memberId",member.getMemberId());
         return view;
+    }
+    
+    @GetMapping("/resend-check-email")
+    public String resendCheckEmail(@CurrentUser Member member, Model model){
+        memberService.sendCheckEmail(member);
+        model.addAttribute(member);
+        return "member/resend-check-email";
+    }
+
+    @GetMapping("/profile")
+    public String viewProfile(@CurrentUser Member member, Model model){
+        model.addAttribute(member);
+
+        return "member/profile";
     }
 }

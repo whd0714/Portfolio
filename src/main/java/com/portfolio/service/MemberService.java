@@ -5,6 +5,7 @@ import com.portfolio.controller.member.UserMember;
 import com.portfolio.controller.settings.NotificationForm;
 import com.portfolio.controller.settings.PasswordForm;
 import com.portfolio.controller.settings.SettingMemberForm;
+import com.portfolio.domain.Keyword;
 import com.portfolio.domain.Member;
 import com.portfolio.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class MemberService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
     private final MemberRepository memberRepository;
+
 
     public Member processNewMember(SignUpForm signUpForm){
         Member newMember = createNewMember(signUpForm);
@@ -103,5 +105,24 @@ public class MemberService implements UserDetailsService {
 
         memberRepository.save(member);
 
+    }
+
+    public void addKeyword(Member member, Keyword keyword) {
+        Member byMemberId = memberRepository.findByMemberId(member.getMemberId());
+        if (byMemberId != null){
+            byMemberId.getKeywords().add(keyword);
+        }
+    }
+
+    public void removeKeyword(Member member, Keyword keyword) {
+        Member byMemberId = memberRepository.findByMemberId(member.getMemberId());
+        if (byMemberId != null){
+            byMemberId.getKeywords().remove(keyword);
+        }
+    }
+
+    public List<Keyword> getKeyword(Member member) {
+        Member byMemberId = memberRepository.findByMemberId(member.getMemberId());
+        return byMemberId.getKeywords();
     }
 }

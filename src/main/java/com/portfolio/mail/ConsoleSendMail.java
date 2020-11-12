@@ -13,7 +13,7 @@ import java.io.InputStream;
 
 @Component
 @Slf4j
-@Profile("local")
+@Profile({"local","dev"})
 public class ConsoleSendMail implements JavaMailSender {
     @Override
     public MimeMessage createMimeMessage() {

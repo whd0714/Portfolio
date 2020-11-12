@@ -1,26 +1,33 @@
 package com.portfolio.controller.settings;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.portfolio.controller.member.CurrentUser;
 import com.portfolio.controller.validator.PasswordFormValidator;
+import com.portfolio.domain.Keyword;
 import com.portfolio.domain.Member;
+import com.portfolio.repository.KeywordRepository;
 import com.portfolio.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
 public class SettingsController {
 
     private final MemberService memberService;
+    private final KeywordRepository keywordRepository;
+    private final ObjectMapper objectMapper;
 
     @InitBinder("passwordForm")
     public void SettingMemberFormBinder(WebDataBinder webDataBinder){
@@ -88,6 +95,52 @@ public class SettingsController {
         attributes.addFlashAttribute("message", "알림 설정이 되었습니다");
         memberService.updateNotification(member, notificationForm);
         return "redirect:/settings/notification";
+    }
+
+    @GetMapping("/settings/keyword")
+    public String updateKeywordForm(@CurrentUser Member member, Model model){
+        model.addAttribute(member);
+        List<Keyword> keyword = memberService.getKeyword(member);
+        if(keyword == null){
+            System.out.println("널임");
+        }else{
+            System.out.println(keyword);
+            System.out.println(keyword);
+        }
+        model.addAttribute("keywordList",keyword.stream().map(Keyword::getTitle).collect(Collectors.toList()));
+
+        List<String> allKeyword = keywordRepository.findAll().stream().map(Keyword::getTitle).collect(Collectors.toList());
+        model.addAttribute("whitelist", allKeyword);
+
+        return "settings/keyword";
+    }
+
+    @PostMapping("/settings/keyword/add")
+    @ResponseBody
+    public ResponseEntity addKeyword(@CurrentUser Member member, @RequestBody KeywordForm keywordForm) {
+        String title = keywordForm.getTitle();
+        Keyword keyword = keywordRepository.findByTitle(title);
+
+        if(keyword == null){
+            keyword = keywordRepository.save(Keyword.builder().title(keywordForm.getTitle()).build());
+        }
+        memberService.addKeyword(member, keyword);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/settings/keyword/remove")
+    @ResponseBody
+    public ResponseEntity removeKeyword(@CurrentUser Member member, @RequestBody KeywordForm keywordForm){
+        String title = keywordForm.getTitle();
+        Keyword keyword = keywordRepository.findByTitle(title);
+
+        if(keyword == null){
+            keyword = keywordRepository.save(Keyword.builder().title(keywordForm.getTitle()).build());
+        }
+
+        memberService.removeKeyword(member, keyword);
+        return ResponseEntity.ok().build();
     }
 
 }

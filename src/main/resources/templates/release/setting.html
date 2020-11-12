@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments.html :: head"
+>
+</head>
+<body>
+
+    <div th:replace="fragments.html :: main-nav"></div>
+
+    <div th:if="${release.useImage}" class="row">
+        <img th:src="${release.image}">
+    </div>
+
+    <div class="container bg-light">
+        <div th:replace="fragments.html :: releaseInfo"></div>
+    <div th:replace="fragments.html :: release-menu (currentMenu = 'setting')"></div>
+    </div>
+
+    <div class="container justify-content-center py-3">
+        <div class="row">
+            <div class="col-3 "  th:replace="fragments.html :: release-setting-menu (currentMenu = 'releaseStore')"></div>
+            <div id="whitelist" th:text="${whiteList}" hidden></div>
+            <div class="col-8 ml-3 mt-2">
+                <div class="alert alert-info" role="alert">
+                    해당 제품이 발매될 매장을 설정하세요
+                </div>
+                <span id="pathName" name="pathName" th:text="${pathName}" hidden></span>
+
+                <input type="text" id="tags" name="tags" th:value="${#strings.listJoin(storeList,',')}" class="tagify-outside col-12">
+            </div>
+        </div>
+
+    </div>
+
+    <script type="application/javascript" th:inline="javascript">
+        $(function() {
+            var csrfToken = /*[[${_csrf.token}]]*/ null;
+            var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
+            $(document).ajaxSend(function (e, xhr, options) {
+                xhr.setRequestHeader(csrfHeader, csrfToken);
+            });
+        });
+    </script>
+    <script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
+    <script type="application/javascript">
+        $(function () {
+            function tagRequest(url, storeName) {
+                $.ajax({
+                    dataType: "json",
+                    autocomplete: {
+                        enabled: true,
+                        rightKey: true,
+                    },
+                    contentType: "application/json; charset=utf-8",
+                    method: "POST",
+                    url: "/release/"+path+ "/setting" + url,
+                    data: JSON.stringify({'storeName': storeName})
+                }).done(function (data, status) {
+                    console.log("${data} and status is ${status}");
+                });
+            }
+
+            function onAdd(e) {
+                tagRequest("/add", e.detail.data.value);
+            }
+
+            function onRemove(e) {
+                tagRequest("/remove", e.detail.data.value);
+            }
+            var path = document.getElementById('pathName').innerHTML;
+            var tagInput = document.querySelector("#tags");
+
+            var tagify = new Tagify(tagInput, {
+                enforceWhitelist: true,
+                whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
+                dropdown : {
+                    enabled: 1, // suggest tags after a single character input
+                } // map tags
+            });
+
+            tagify.on("add", onAdd);
+            tagify.on("remove", onRemove);
+
+            // add a class to Tagify's input element
+            tagify.DOM.input.classList.add('form-control');
+            // re-place Tagify's input element outside of the  element (tagify.DOM.scope), just before it
+            tagify.DOM.scope.parentNode.insertBefore(tagify.DOM.input, tagify.DOM.scope);
+        });
+    </script>
+
+</body>
+</html>

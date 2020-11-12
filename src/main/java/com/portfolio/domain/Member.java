@@ -2,11 +2,10 @@ package com.portfolio.domain;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -26,6 +25,9 @@ public class Member {
 
     @Column(nullable = false)
     private String email;
+
+    @ManyToMany
+    private List<Keyword> keywords = new ArrayList<>();
 
     private int shoeSize;
 

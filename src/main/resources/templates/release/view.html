@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments.html :: head"
+>
+</head>
+<body>
+
+    <div th:replace="fragments.html :: main-nav"></div>
+
+    <div th:if="${release.useImage}" class="row">
+        <img th:src="${release.image}">
+    </div>
+
+    <div class="container bg-light">
+        <div th:replace="fragments.html :: releaseInfo"></div>
+
+    <div th:replace="fragments.html :: release-menu (currentMenu = 'store')"></div>
+    </div>
+
+    <div class="container row justify-content-center py-5">
+        <div th:each="sName: ${release.stores}">
+            <div class="row">
+            <span class="d-inline-block mr-5 ml-5" tabindex="0" data-toggle="tooltip"
+                  data-placement="bottom">
+                <bottom class="btn btn-success btn-sm" style="pointer-events: none;" type="button" disabled>
+                    <span th:text="${sName.storeName}"></span>
+                </bottom>
+            </span>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</body>
+</html>

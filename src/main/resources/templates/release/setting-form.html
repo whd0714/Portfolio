@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments.html :: head"
+>
+</head>
+<body>
+
+    <div th:replace="fragments.html :: main-nav"></div>
+
+    <div th:if="${release.useImage}" class="row">
+        <img th:src="${release.image}">
+    </div>
+
+    <div class="container bg-light">
+        <div th:replace="fragments.html :: releaseInfo"></div>
+        <div th:replace="fragments.html :: release-menu (currentMenu = 'setting')"></div>
+    </div>
+
+    <div class="container justify-content-center py-3">
+        <div class="row">
+            <div class="col-3"  th:replace="fragments.html :: release-setting-menu (currentMenu = 'releaseStoreForm')"></div>
+
+            <form th:action="@{/release}" method="post" th:object="${releaseForm}" novalidate class="needs-validation col-8">
+                <div class="form-group ml-3">
+                    <label for="title">제목</label>
+                    <input type="text" id="title" th:field="*{title}" required minlength="2" maxlength="8"
+                           class="form-control" placeholder="제목을 입력해 주세요">
+                    <small class="invalid-feedback">제목을 입력하세요</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
+                        title error
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="date">발매일</label>
+                    <input type="date" id="date" th:field="*{releaseTime}" required class="form-group">
+                    <small class="invalid-feedback">발매일을 입력하세요</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('releaseTime')}" th:errors="*{releaseTime}">
+                        releaseTime error
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="brand">브랜드</label>
+                    <input type="text" id="brand" th:field="*{brand}" required minlength="2" maxlength="8"
+                           class="form-control">
+                    <small class="invalid-feedback">브랜드를 입력하세요</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('brand')}" th:errors="*{brand}">
+                        brand error
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="modelNo">모델번호</label>
+                    <input type="text" id="modelNo" th:field="*{modelNo}" required minlength="2" maxlength="8"
+                           class="form-control">
+                    <small class="invalid-feedback">모델번호를 입력하세요</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('modelNo')}" th:errors="*{modelNo}">
+                        modelNo error
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-block btn-secondary" type="submit">
+                        작성 완료
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+
+
+</body>
+</html>

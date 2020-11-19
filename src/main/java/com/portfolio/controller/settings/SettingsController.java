@@ -38,6 +38,7 @@ public class SettingsController {
     public String viewProfileForm(@CurrentUser Member member, Model model){
         model.addAttribute(member);
         model.addAttribute(new SettingMemberForm(member));
+
         return "settings/profile";
     }
 
@@ -101,12 +102,7 @@ public class SettingsController {
     public String updateKeywordForm(@CurrentUser Member member, Model model){
         model.addAttribute(member);
         List<Keyword> keyword = memberService.getKeyword(member);
-        if(keyword == null){
-            System.out.println("널임");
-        }else{
-            System.out.println(keyword);
-            System.out.println(keyword);
-        }
+
         model.addAttribute("keywordList",keyword.stream().map(Keyword::getTitle).collect(Collectors.toList()));
 
         List<String> allKeyword = keywordRepository.findAll().stream().map(Keyword::getTitle).collect(Collectors.toList());

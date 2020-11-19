@@ -35,6 +35,7 @@ public class ReleaseController {
     private final ObjectMapper objectMapper;
     private final StoreRepository storeRepository;
 
+
     @GetMapping("/release")
     public String releaseForm(@CurrentUser Member member, Model model){
         model.addAttribute(member);
@@ -49,7 +50,7 @@ public class ReleaseController {
             return "release/form";
         }
 
-        Release newRelease = releaseService.newReleaseInfo(releaseForm, member);
+        Release newRelease = releaseService.newReleaseInfo(releaseForm);
         return "redirect:/release/" + URLEncoder.encode(newRelease.getModelNo(),StandardCharsets.UTF_8);
     }
 
@@ -58,15 +59,15 @@ public class ReleaseController {
         model.addAttribute(member);
 
         Release byModelNo = releaseRepository.findByModelNo(path);
-        List<Store> store = releaseService.getStore(byModelNo);
+       // List<Store> store = releaseService.getStore(byModelNo);
+        releaseService.addMember(byModelNo, member);
 
-
-        model.addAttribute("storeList", store.stream().map(Store::toString).collect(Collectors.toList()));
+       // model.addAttribute("storeList", store.stream().map(Store::toString).collect(Collectors.toList()));
 
         if(byModelNo != null){
             model.addAttribute(byModelNo);
         }
-        model.addAttribute("storeNameList",byModelNo.getStores().stream().map(Store::getStoreName).collect(Collectors.toList()));
+ //       model.addAttribute("storeNameList",byModelNo.getStores().stream().map(Store::getStoreName).collect(Collectors.toList()));
         return "release/view";
     }
 

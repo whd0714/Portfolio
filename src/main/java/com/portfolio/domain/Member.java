@@ -29,6 +29,9 @@ public class Member {
     @ManyToMany
     private List<Keyword> keywords = new ArrayList<>();
 
+    @ManyToMany
+    private List<Comment> comments = new ArrayList<>();
+
     private int shoeSize;
 
     private String emailToken;

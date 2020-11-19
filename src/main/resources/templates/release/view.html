@@ -8,10 +8,6 @@
 
     <div th:replace="fragments.html :: main-nav"></div>
 
-    <div th:if="${release.useImage}" class="row">
-        <img th:src="${release.image}">
-    </div>
-
     <div class="container bg-light">
         <div th:replace="fragments.html :: releaseInfo"></div>
 

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments.html :: head">
+</head>
+<body>
+<div th:replace="fragments.html :: main-nav"></div>
+
+<div class="container row justify-content-center">
+    <div class="col-3">
+        <div class="row">
+            <a th:href="@{/new-board}" class="btn btn-block btn-info col-11">
+                글쓰기
+            </a>
+            <div th:replace="fragments.html :: board-menu (currentMenu = 'free')"></div>
+        </div>
+    </div>
+    <div class="col-8 ml-3" style="border: 1px solid #e2e2e2">
+        <div class="row">
+            <h3 class="ml-2" th:text="${title}"></h3>
+        </div>
+        <div class="row" style="font-size: 20px">
+            <div class="col-2">
+                <svg th:data-jdenticon-value="${member.getId()}" width="80" height="80">
+                </svg>
+            </div>
+            <div class="col-6">
+                <div class="row">
+                    <span th:text="${member.getMemberId()}"></span>
+                </div>
+
+                <div class="row">
+                    <span class="inline" th:text="${time}"></span>
+                </div>
+            </div>
+
+        </div>
+        <hr size="1px">
+
+        <div class="row">
+            <span class="ml-5 mr-5" th:utext="${description}"></span>
+        </div>
+
+        <hr size="1px">
+
+        <div class="row">
+
+            <input type="text" id="reply" name="reply">
+            <button onclick="clickAction()" name="btn1" id="btn1">클릭</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+<script type="application/javascript" th:inline="javascript">
+    $(function() {
+        var csrfToken = /*[[${_csrf.token}]]*/ null;
+        var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
+        $(document).ajaxSend(function (e, xhr, options) {
+            xhr.setRequestHeader(csrfHeader, csrfToken);
+        });
+    });
+    var reply = document.querySelector("#reply");
+
+    function clickAction(){
+        $.ajax({
+            dataType: "json",
+            autocomplete: {
+                enabled: true,
+                rightKey: true,
+            },
+            contentType: "application/json; charset=utf-8",
+            method: "POST",
+            url: "new-board/add",
+            data: JSON.stringify({'reply': reply})
+
+        });
+
+
+    }
+
+</script>
+<script type="application/javascript">
+
+</script>
+
+
+
+</body>
+</html>

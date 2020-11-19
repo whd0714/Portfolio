@@ -49,6 +49,10 @@ public class Release {
 
     private LocalDate releaseTime;
 
+    private LocalDate writeTime;
+
+    private boolean open;
+
     public void addMember(Member member) {
         this.members.add(member);
     }
@@ -63,5 +67,10 @@ public class Release {
 
     public boolean todayRelease(){
         return releaseTime.isEqual(LocalDate.now());
+    }
+
+    public void openSetting() {
+        this.open = true;
+        this.writeTime = LocalDate.now();
     }
 }

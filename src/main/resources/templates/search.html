@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments.html :: head">
+</head>
+<body>
+
+    <div th:replace="fragments.html :: main-nav"></div>
+
+    <div class="container">
+        <p th:if="${#lists.isEmpty(releaseList)}">
+            <span th:text="${word}"></span>에 해당하는 발매정보가 없습니다.
+        </p>
+        <p th:if="${!#lists.isEmpty(releaseList)}">
+            <span th:text="${word}"></span>에 해당하는 발매정보를
+            <span th:text="${releaseList.size()}"></span>개 찾았습니다.
+        </p>
+    </div>
+    <div class="container justify-content-center">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-4" th:each="release: ${releaseList}">
+                     <div class="card" style="width: 18rem; margin: 20px;">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a class="mr-5" th:href="@{'/release/' + ${release.modelNo}}">
+                                    <span th:text="${release.modelNo}"></span>
+                                </a>
+                                <span class="ml-4">
+                                    <span th:if="${release.postRelease()}" class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                                          data-placement="bottom" title="발매전">
+                                      <bottom class="btn btn-info btn-sm" style="pointer-events: none;" type="button" disabled>출시예정</bottom>
+                                </span>
+                                <span th:if="${release.deadLine()}" class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                                      data-placement="bottom" title="발매종료">
+                                    <bottom class="btn btn-secondary btn-sm" style="pointer-events: none;" type="button" disabled>발매종료</bottom>
+                                </span>
+                                <span th:if="${release.todayRelease()}" class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                                      data-placement="bottom" title="오늘출시">
+                                     <bottom class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>오늘발매</bottom>
+                                </span>
+                                </span>
+                            </h5>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                브랜드 <span class="ml-5" th:text="${release.brand}"></span>
+                            </li>
+                            <li class="list-group-item">
+                                출시일 <span class="ml-5" th:text="${release.releaseTime}"></span>
+                            </li>
+                        </ul>
+                        <div class="card-body" >
+                            <p>
+                                발매점
+                            </p>
+                            <p th:each="keyword: ${release.stores}">
+                                <bottom class="btn btn-success btn-sm" style="pointer-events: none;" type="button" disabled>
+                                    <span th:text="${keyword.storeName}"></span>
+                                </bottom>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>

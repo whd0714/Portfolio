@@ -3,6 +3,8 @@ package com.portfolio.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,19 @@ public class Board {
     @Lob
     private String description;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    private LocalDate atWriting;
+
+    @ManyToMany
     private List<Member> members = new ArrayList<>();
+
+    @ManyToMany
+    private List<Comment> comments = new ArrayList<>();
+
+    public void settingTime() {
+        this.atWriting = LocalDate.now();
+    }
+
+    public void addMember(Member member){
+        members.add(member);
+    }
 }

@@ -41,8 +41,8 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <form th:action="@{/search/release}" class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" name="word" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
             <ul class="navbar-nav ml-auto">
@@ -58,10 +58,10 @@
                     </a>
                 </li>
                 <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" href="#" th:href="@{/board}">게시판<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="#" th:href="@{/release}">발매정보<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" href="#" th:href="@{/release}">발매정보<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="#" th:href="@{/board}">게시판<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -219,6 +219,10 @@
         <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'releaseStoreForm'}? active" th:href="@{'/release/' + ${release.modelNo} + '/setting/form'}" role="tab" aria-controls="buy">상품정보 설정</a>
     </div>
 
+    <div th:fragment="board-menu (currentMenu)" class="list-group col-12 text-center mt-2">
+        <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'free'}? active" th:href="@{/board}" role="tab" aria-controls="buy">자유 게시판</a>
+        <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'welcome'}? active" th:href="@{/board/welcome}" role="tab" aria-controls="password">가입 인사</a>
+    </div>
 
 </body>
 </html>

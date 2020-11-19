@@ -26,7 +26,7 @@ public class ReleaseService {
     private final ReleaseRepository releaseRepository;
     private final ShoeRepository shoeRepository;
 
-    public Release newReleaseInfo(ReleaseForm releaseForm, Member member) {
+    public Release newReleaseInfo(ReleaseForm releaseForm) {
         LocalDate localDate = LocalDate.parse(releaseForm.getReleaseTime());
         Release release = Release.builder()
                 .title(releaseForm.getTitle())
@@ -35,7 +35,9 @@ public class ReleaseService {
                 .releaseTime(localDate)
                 .build();
 
+        release.openSetting();
         releaseRepository.save(release);
+
 
         Shoe shoe = Shoe.builder()
                 .brand(release.getBrand())
@@ -45,7 +47,7 @@ public class ReleaseService {
         return release;
     }
 
-    public List<Store>  getStore(Release byModelNo) {
+    public List<Store> getStore(Release byModelNo) {
         Optional<Release> byId = releaseRepository.findById(byModelNo.getId());
         return byId.orElseThrow().getStores();
     }
@@ -54,5 +56,10 @@ public class ReleaseService {
     public void updateStoreKeyword(Release release, Store store) {
         Optional<Release> byId = releaseRepository.findById(release.getId());
         byId.ifPresent(a -> a.getStores().add(store));
+    }
+
+    public void addMember(Release byModelNo, Member member) {
+        Optional<Release> byId = releaseRepository.findById(byModelNo.getId());
+        byId.ifPresent(a->a.getMembers().add(member));
     }
 }
